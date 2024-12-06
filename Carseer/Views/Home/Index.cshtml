@@ -1,0 +1,51 @@
+﻿@model List<Carseer.Services.Model>
+@{
+    ViewBag.Title = "Car Selector";
+}
+
+<h2>Car Selector</h2>
+
+<form method="post" asp-controller="Vehicles" asp-action="Index">
+    <div class="form-group">
+        <label for="make">Select Make:</label>
+        <select id="make" class="form-control" name="selectedMakeId">
+            <option value="">--Select Make--</option>
+            @foreach (var make in ViewBag.Makes as List<SelectListItem>)
+            {
+                <option value="@make.Value">@make.Text</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="year">Enter Year:</label>
+        <input type="number" id="year" class="form-control" name="year" required />
+    </div>
+
+    <div class="form-group">
+        <label for="vehicleType">Select Vehicle Type:</label>
+        <select id="vehicleType" class="form-control" name="selectedVehicleType">
+            <option value="">--Select Vehicle Type--</option>
+            @if (ViewBag.VehicleTypes != null)
+            {
+                foreach (var vehicleType in ViewBag.VehicleTypes as List<SelectListItem>)
+                {
+                    <option value="@vehicleType.Value">@vehicleType.Text</option>
+                }
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Get Models</button>
+</form>
+
+@*@if (Model != null && Model.Any())
+{
+    <h3>Available Models:</h3>
+    <ul>
+        @foreach (var model in Model)
+        {
+            <li>@model.Model_Name</li>
+        }
+    </ul>
+}*@
