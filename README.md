@@ -96,10 +96,10 @@ This project is a **Vehicle Selector Application** built using **ASP.NET Core 6*
 ### Screenshots
 
 #### **1. Vehicle Selector Interface**
-![Vehicle Selector Screenshot](https://via.placeholder.com/800x400?text=Screenshot+Coming+Soon)
+<img width="452" alt="image" src="https://github.com/user-attachments/assets/ead2973a-6b4f-4199-8ce8-5e9a7fae1add">
 
 #### **2. Searchable Dropdowns**
-![Dropdown Screenshot](https://via.placeholder.com/800x400?text=Screenshot+Coming+Soon)
+<img width="433" alt="image" src="https://github.com/user-attachments/assets/151f2cfe-6b3e-4b1f-8680-2718b847e125">
 
 ---
 
