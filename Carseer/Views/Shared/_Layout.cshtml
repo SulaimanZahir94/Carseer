@@ -53,7 +53,7 @@
 	</div>
 	<section class="border-top carseer-footer text-muted bg-white">
 		<div class="container">
-			&copy; 2024 - Carseer - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+			What is the Vehicle Selector? 
 		</div>
 	</section>
 	<footer class="border-top footer text-muted bg-white">
@@ -61,9 +61,24 @@
 			&copy; 2024 - Carseer - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
 		</div>
 	</footer>
+
+	<!-- Local jQuery (if you prefer using local files) -->
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+	<!-- Or use CDN for jQuery -->
+	<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+	<!-- Bootstrap JS -->
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+	<!-- Site Scripts -->
 	<script src="~/js/site.js" asp-append-version="true"></script>
+
+	<!-- Select2 CSS -->
+	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+	<!-- Select2 JS -->
+	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 	@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

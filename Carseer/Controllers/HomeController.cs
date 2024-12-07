@@ -8,30 +8,37 @@ namespace Carseer.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-        private readonly VehicleService _vehicleService;
+        private readonly HttpClient _httpClient;
 
-        public HomeController(ILogger<HomeController> logger, VehicleService vehicleService)
+        public HomeController(HttpClient httpClient)
         {
-            _logger = logger;
-            _vehicleService = vehicleService;
+            _httpClient = httpClient;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var makes = await _vehicleService.GetAllMakes();
-            ViewBag.Makes = makes.Select(m => new SelectListItem(m.Make_Name, m.Make_ID.ToString())).ToList();
             return View();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Index(int selectedMakeId, int year, string selectedVehicleType)
+        [HttpGet]
+        public async Task<IActionResult> GetMakes()
         {
-            var vehicleTypes = await _vehicleService.GetVehicleTypesForMake(selectedMakeId);
-            ViewBag.VehicleTypes = vehicleTypes.Select(v => new SelectListItem(v.VehicleTypeName, v.VehicleTypeName)).ToList();
+            var response = await _httpClient.GetStringAsync("https://vpic.nhtsa.dot.gov/api/vehicles/getallmakes?format=json");
+            return Content(response, "application/json");
+        }
 
-            var models = await _vehicleService.GetModelsForMakeAndYear(selectedMakeId, year, selectedVehicleType);
-            return View(models);
+        [HttpGet]
+        public async Task<IActionResult> GetVehicleTypes(int makeId)
+        {
+            var response = await _httpClient.GetStringAsync($"https://vpic.nhtsa.dot.gov/api/vehicles/GetVehicleTypesForMakeId/{makeId}?format=json");
+            return Content(response, "application/json");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetModels(int makeId, int year)
+        {
+            var response = await _httpClient.GetStringAsync($"https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMakeIdYear/makeId/{makeId}/modelyear/{year}?format=json");
+            return Content(response, "application/json");
         }
 
         public IActionResult Privacy()

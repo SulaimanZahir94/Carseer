@@ -1,51 +1,87 @@
-﻿@model List<Carseer.Services.Model>
-@{
-    ViewBag.Title = "Car Selector";
+﻿@{
+	ViewData["Title"] = "Vehicle Selector";
 }
 
-<h2>Car Selector</h2>
+<h1>Vehicle Selector</h1>
 
-<form method="post" asp-controller="Vehicles" asp-action="Index">
-    <div class="form-group">
-        <label for="make">Select Make:</label>
-        <select id="make" class="form-control" name="selectedMakeId">
-            <option value="">--Select Make--</option>
-            @foreach (var make in ViewBag.Makes as List<SelectListItem>)
-            {
-                <option value="@make.Value">@make.Text</option>
-            }
-        </select>
-    </div>
+<div class="form-group">
+	<label for="makes">Select Car Make:</label>
+	<select id="makes" class="form-control"></select>
+</div>
 
-    <div class="form-group">
-        <label for="year">Enter Year:</label>
-        <input type="number" id="year" class="form-control" name="year" required />
-    </div>
+<div class="form-group">
+	<label for="year">Enter Manufacture Year:</label>
+	<input type="number" id="year" class="form-control" min="1900" max="2024" />
+</div>
 
-    <div class="form-group">
-        <label for="vehicleType">Select Vehicle Type:</label>
-        <select id="vehicleType" class="form-control" name="selectedVehicleType">
-            <option value="">--Select Vehicle Type--</option>
-            @if (ViewBag.VehicleTypes != null)
-            {
-                foreach (var vehicleType in ViewBag.VehicleTypes as List<SelectListItem>)
-                {
-                    <option value="@vehicleType.Value">@vehicleType.Text</option>
-                }
-            }
-        </select>
-    </div>
+<div class="form-group">
+	<label for="vehicleTypes">Select Vehicle Type:</label>
+	<select id="vehicleTypes" class="form-control"></select>
+</div>
 
-    <button type="submit" class="btn btn-primary">Get Models</button>
-</form>
+<div class="form-group">
+	<label for="models">Available Models:</label>
+	<select id="models" class="form-control" multiple></select>
+</div>
 
-@*@if (Model != null && Model.Any())
-{
-    <h3>Available Models:</h3>
-    <ul>
-        @foreach (var model in Model)
-        {
-            <li>@model.Model_Name</li>
-        }
-    </ul>
-}*@
+
+@section Scripts{
+	<script>
+		$(document).ready(function() {
+			// Initialize Select2
+			$('#makes, #vehicleTypes, #models').select2();
+
+			// Load Makes
+			$.ajax({
+				url: '/Home/GetMakes',
+				method: 'GET',
+				success: function(data) {
+					let makes = data.Results;
+					makes.forEach(make => {
+						$('#makes').append(new Option(make.Make_Name, make.Make_ID));
+					});
+				}
+			});
+
+			// Load Vehicle Types based on Make
+			$('#makes').on('change', function() {
+				let makeId = $(this).val();
+				$('#vehicleTypes').empty();
+				$.ajax({
+					url: `/Home/GetVehicleTypes?makeId=${makeId}`,
+					method: 'GET',
+					success: function(data) {
+						let types = data.Results;
+						types.forEach(type => {
+							$('#vehicleTypes').append(new Option(type.VehicleTypeName, type.VehicleTypeId));
+						});
+					}
+				});
+			});
+
+			$("#year").on("blur", function() {
+				debugger;
+				// Load Models based on Make, Year
+				let makeId = $('#makes').val();
+				let year = $('#year').val();
+
+				$('#models').empty();
+
+				if (makeId && year) {
+					$.ajax({
+						url: `/Home/GetModels?makeId=${makeId}&year=${year}`,
+						method: 'GET',
+						success: function(data) {
+							let models = data.Results;
+							models.forEach(model => {
+								$('#models').append(new Option(model.Model_Name, model.Model_Name));
+							});
+						}
+					});
+				}
+				//});
+			});
+
+		});
+	</script>
+}
